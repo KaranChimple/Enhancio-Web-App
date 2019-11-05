@@ -1,26 +1,40 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import axios from 'axios';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends React.Component {
+  state = {
+    name: '',
+  }
+
+  handleChange = event => {
+    this.setState({ name: event.target.value });
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+
+    const user = {
+      name: this.state.name
+    };
+
+    axios.get(`https://api.github.com/search/users?q=location%3Abangalore`, { user })
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+  }
+
+  render() {
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Person Name:
+            <input type="text" name="name" onChange={this.handleChange} />
+          </label>
+          <button type="submit">Add</button>
+        </form>
+      </div>
+    )
+  }
 }
-
-export default App;
